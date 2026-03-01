@@ -1,5 +1,5 @@
 function setup() {
-    createCanvas(0, 0);
+    createCanvas(600, 500);
 
     // Test your code by creating objects, calling their methods, and printing the output to the console
     const brian = new Animal("Brian", 95, 10);
@@ -7,6 +7,10 @@ function setup() {
 
     const pete = new FurryAnimal("Peter", 50, 3, color(255, 0, 0));
     console.log(pete.call());
+
+    const rupert = new Bird("Rupert", 100, 42, "tall beak");
+    rupert.decreaseHealth();
+    console.log(rupert.getHealthLevel());
 }
 
 
@@ -128,4 +132,82 @@ class FurryAnimal extends Animal {
     getFurColour() {
         return this.#furColour;
     }
+}
+
+// SOLUTION CODE BELOW HERE
+class Cat extends FurryAnimal {
+    // constructor not needed as there are no changes to the attributes in the parent
+
+    /**
+     * The cat jumps at a bird -- the cat moves to the bird's position and the bird's health decreases
+     * @param {Bird} bird 
+     */
+    jumpAt(bird) {
+        this.moveX(bird.getX());
+        this.moveY(bird.getY());
+        bird.decreaseHealth();
+    }
+
+
+    call() {
+        return "meow"
+    }
+}
+
+
+class Dog extends FurryAnimal {
+    // constructor not needed as there are no changes to the attributes in the parent
+
+
+    /**
+     * If the cat is too close to this dog, the dog barks
+     * @param {Cat} cat 
+     */
+    barkAt(cat) {
+        const DIST = 50;
+        if (dist(this.getX(), this.getY(), cat.getX(), cat.getY()) < DIST) {
+            console.log("Woof!");
+        }
+    }
+}
+
+
+/**
+ * A subclass for Birds.
+ */
+class Bird extends Animal {
+    #beakType;
+
+
+    /**
+     * Creates a new Bird
+     * @param {string} name 
+     * @param {number} health 
+     * @param {number} age 
+     * @param {string} beakType Describes the bird's beak e.g. hooked, pointy
+     */
+    constructor(name, health, age, beakType) {
+        super(name, health, age);
+        this.#beakType = beakType;
+    }
+
+
+    /**
+     * Gets the bird's beak type
+     * @returns {string}
+     */
+    getBeakType() {
+        return this.#beakType;
+    }
+
+
+    decreaseHealth() {
+        // #decreaseHealth is private to the parent class so instead of reducing the attribute directly
+        // we need to call the overridden method multiple times.
+        super.decreaseHealth();
+        super.decreaseHealth();
+        super.decreaseHealth();
+    }
+
+   
 }
